@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import AddReminder from './AddReminder';
+import ReminderForm from './ReminderForm';
 import { closeAddReminder } from '../../redux/actions';
 
 interface State {
@@ -10,8 +10,7 @@ interface State {
 
 const mapStateToProps = (state:State) => {
 	return { 
-		isOpen: state.addReminderStatus.isOpen,
-		date: "08/27/1984 2:00PM"
+		isOpen: state.addReminderStatus.isOpen
 	};
 }
 
@@ -23,6 +22,6 @@ const mapDispatchToProps = (dispatch: any) => {
 	}
 }
 
-const AddReminderContainer = connect( mapStateToProps, mapDispatchToProps )( AddReminder );
+const ReminderFormContainer = connect( mapStateToProps, mapDispatchToProps )( ReminderForm );
 
-export default AddReminderContainer;
+export default ReminderFormContainer;
