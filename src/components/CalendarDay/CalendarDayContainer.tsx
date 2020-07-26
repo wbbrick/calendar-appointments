@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 import CalendarDay from './CalendarDay';
 import { openAgenda } from '../../redux/actions';
+import Reminder from '../../types/Reminder';
 
 interface Props {
 
 }
 
 interface State {
-
+	reminderList: Array<Reminder>
 }
 
 interface DateObj {

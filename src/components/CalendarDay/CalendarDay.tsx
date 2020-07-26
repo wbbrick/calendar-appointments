@@ -3,7 +3,8 @@ import Avatar from '@material-ui/core/Avatar';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { isSameMonth, isSameDay, getDate } from 'date-fns';
-
+import Reminder from '../../types/Reminder';
+import { format, fromUnixTime } from 'date-fns';
 
 const styles = (theme: Theme) => createStyles({
 	dayCell: {
@@ -54,7 +55,16 @@ const styles = (theme: Theme) => createStyles({
 		backgroundColor: deepPurple[800],
 	},
 	remindersContainer: {
-		height: '100%'
+		height: '100%',
+		display: 'flex'
+	},
+	reminderCircle: {
+		flex: '0 0 auto',
+		height: '8px',
+		width: '8px',
+		margin: '6px 0',
+		borderRadius: '4px',
+		border: '1px solid red'
 	}
 });
 
@@ -65,11 +75,12 @@ interface DateObj {
 interface Props extends WithStyles<typeof styles>{
 	calendarDate: Date,
 	dateObj: DateObj,
-	onDayClick: (dateObj: DateObj) => void
+	onDayClick: (dateObj: DateObj) => void,
+	reminderList: Array<Reminder>
 }
 
 const CalendarDay = (props: Props) => {
-	const { classes, dateObj, calendarDate, onDayClick } = props;
+	const { classes, dateObj, calendarDate, reminderList, onDayClick } = props;
 	const [ focused, setFocused ] = useState(false)
 
 	const isToday = isSameDay( dateObj.date, new Date() );
@@ -77,6 +88,10 @@ const CalendarDay = (props: Props) => {
 		isToday ? classes.todayAvatar :
 		focused ? classes.focusedAvatar :
 		classes.dateNumber;
+	
+	const todaysReminders = reminderList.filter(
+		rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(dateObj.date, 'MM/dd/yyyy')
+	);
 
 	const onMouseOver = () => setFocused(true)
 	const onMouseOut = () => setFocused(false)
@@ -94,7 +109,9 @@ const CalendarDay = (props: Props) => {
 		>
 			<Avatar className={ avatarClass }>{ getDate( dateObj.date ) }</Avatar>
 			<div className={ classes.remindersContainer }>
-				{/* reminders go here */}
+				{ todaysReminders.map((rem, idx) => (
+					<div className={classes.reminderCircle} key={idx} />
+				) ) }
 			</div>
 		</div>
 	)
