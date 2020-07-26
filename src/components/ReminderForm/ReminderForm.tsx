@@ -32,7 +32,7 @@ interface Props extends WithStyles<typeof styles>{
 
 const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 	// our default reminder is set exactly 24 hours from now
-	const [ date, setDate ] = useState(format(addDays(new Date(), 1), DATE_FORMAT));
+	const [ date, setDate ] = useState(addDays(new Date(), 1));
 	const [ name, setName ] = useState('');
 	const [ color, setColor] = useState('#fff');
 
@@ -52,7 +52,7 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 			/>
 			<MuiPickersUtilsProvider utils={DateFnsUtils}>
 				<DateTimePicker
-					format="MM/dd/yyyy h:mma"
+					format={DATE_FORMAT}
 					margin="dense"
 					id="date-picker-inline"
 					label="Date picker inline"
@@ -78,7 +78,7 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 				<Button className={classes.button} onClick={onCancel} variant="contained">Cancel</Button>
 				<Button 
 					className={classes.button} 
-					onClick={() => onSave(name, getUnixTime(parse(date, DATE_FORMAT, new Date())), "#fff")}
+					onClick={() => onSave(name, getUnixTime(date), "#fff") }
 					variant="contained" 
 					color="primary"
 				>
