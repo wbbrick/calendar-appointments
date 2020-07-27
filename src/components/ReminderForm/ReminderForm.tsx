@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from 'react-router-dom';
 import { addDays } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
@@ -9,7 +9,7 @@ import { WithStyles, withStyles, createStyles, Theme } from '@material-ui/core/s
 import Button from '@material-ui/core/Button';
 import Reminder from '../../types/Reminder';
 import { v4 as uuid } from 'uuid';
-import { parse, getUnixTime, fromUnixTime } from 'date-fns';
+import { getUnixTime, fromUnixTime } from 'date-fns';
 
 const DATE_FORMAT = 'MM/dd/yyyy HH:mm';
 
@@ -56,7 +56,7 @@ const ReminderForm = ( { classes, onSave, reminderList } : Props) => {
 		id: uuid()
 	};
 	
-	const { id } = useParams("id");
+	const { id } = useParams('id');
 	const existingReminder = reminderList.find(rem => rem.id === id);
 	const editMode = !!existingReminder && id !== 'new';
 

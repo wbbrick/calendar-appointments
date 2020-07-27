@@ -94,26 +94,26 @@ const initialReminderListState = [
 
 function reminderList( state = initialReminderListState, action: any ) {
 	switch( action.type ) {
-		case ADD_REMINDER:
-			return [...state, action.reminder].sort((a, b) => a.date - b.date);
-		case UPDATE_REMINDER:
-			const previousReminderIdx = state.findIndex(rem => rem.id === action.reminder.id);
+	case ADD_REMINDER:
+		return [...state, action.reminder].sort((a, b) => a.date - b.date);
+	case UPDATE_REMINDER:
+		const previousReminderIdx = state.findIndex(rem => rem.id === action.reminder.id);
+		return [
+			...state.slice(0, previousReminderIdx),
+			action.reminder,
+			...state.slice(previousReminderIdx + 1, state.length)
+		].sort((a, b) => a.date - b.date);
+	case DELETE_REMINDER:
+		const deletedReminderIdx = state.findIndex(rem => rem.id === action.id);
+		if(deletedReminderIdx < 0) {
+			return state;
+		} else {
 			return [
-				...state.slice(0, previousReminderIdx),
-				action.reminder,
-				...state.slice(previousReminderIdx + 1, state.length)
+				...state.slice(0, deletedReminderIdx),
+				...state.slice(deletedReminderIdx + 1, state.length)
 			].sort((a, b) => a.date - b.date);
-		case DELETE_REMINDER:
-			const deletedReminderIdx = state.findIndex(rem => rem.id === action.id);
-			if(deletedReminderIdx < 0) {
-				return state;
-			} else {
-				return [
-					...state.slice(0, deletedReminderIdx),
-					...state.slice(deletedReminderIdx + 1, state.length)
-				].sort((a, b) => a.date - b.date);
-			}
-		default: return state
+		}
+	default: return state
 	}
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
 import AppContainer from './components/App/AppContainer';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'

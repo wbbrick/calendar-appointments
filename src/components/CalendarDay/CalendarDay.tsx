@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -70,13 +70,13 @@ const styles = (theme: Theme) => createStyles({
 		border: '1px solid black',
 	},
 	overflowMessage: {
-		fontFamily: "sans-serif",
-		fontSize: "12px",
-		margin: "auto"
+		fontFamily: 'sans-serif',
+		fontSize: '12px',
+		margin: 'auto'
 	},
 	agendaLink: {
-		textDecoration: "none",
-		fontColor: "black"
+		textDecoration: 'none',
+		fontColor: 'black'
 	}
 });
 
@@ -97,8 +97,8 @@ const CalendarDay = (props: Props) => {
 	const isToday = isSameDay( dateObj.date, new Date() );
 	const avatarClass = isToday && focused ? classes.focusedTodayAvatar :
 		isToday ? classes.todayAvatar :
-		focused ? classes.focusedAvatar :
-		classes.dateNumber;
+			focused ? classes.focusedAvatar :
+				classes.dateNumber;
 	
 	const todaysReminders = reminderList
 		.filter(rem => 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,7 +14,6 @@ import { parse, format, fromUnixTime } from 'date-fns';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 const styles = (theme: Theme) => createStyles({
 	remindersContainer: {
@@ -65,7 +64,7 @@ const AgendaDay = (props: Props) => {
 			.filter(
 				rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(parsedDate, 'MM/dd/yyyy')
 			)
-			.map(rem => ({ ...rem, "time": format(fromUnixTime(rem.date), "hh:mma") })) : [];
+			.map(rem => ({ ...rem, 'time': format(fromUnixTime(rem.date), 'hh:mma') })) : [];
 
 	let agendaContent = (<div>No reminders for today.</div>)
 	
