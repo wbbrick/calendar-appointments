@@ -9,8 +9,10 @@ import Typography from '@material-ui/core/Typography'
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Reminder from '../../types/Reminder';
 import { format, fromUnixTime } from 'date-fns';
-
-import * as dateFns from 'date-fns';
+import List from '@material-ui/core/List';
+import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = (theme: Theme) => createStyles({
 	remindersContainer: {
@@ -27,6 +29,20 @@ const styles = (theme: Theme) => createStyles({
 	},
 	toolbarButtonVisible: {
 		visibility: 'visible'
+	},
+	colorIndicator: {
+		display: 'inline-block',
+		flex: '0 0 auto',
+		height: '10px',
+		width: '10px',
+		margin: '0 2px',
+		borderRadius: '10px'
+	},
+	listEntry: {
+		fontSize: "16px",
+		"& span": {
+			marginRight: "10px"
+		}
 	}
 });
 
@@ -41,22 +57,32 @@ interface Props extends WithStyles<typeof styles>{
 
 const AgendaDay = (props: Props) => {
 	const { classes, agendaStatus, onClose, reminderList } = props;
-	const dateTitle = agendaStatus.date ? dateFns.format( agendaStatus.date, 'LLLL do, yyyy' ) : 'Closing'
+	const dateTitle = agendaStatus.date ? format( agendaStatus.date, 'LLLL do, yyyy' ) : 'Closing'
 
 	const todaysReminders = agendaStatus.date ? 	
-		reminderList.filter(
-			rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(agendaStatus.date, 'MM/dd/yyyy')
-		) : [];
+		reminderList
+			.filter(
+				rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(agendaStatus.date, 'MM/dd/yyyy')
+			)
+			.map(rem => ({ ...rem, "time": format(fromUnixTime(rem.date), "h:mma") })) : [];
 
 	let agendaContent = (<div>No Reminders for today (<a>Add one</a>)</div>)
 	
 	if( todaysReminders.length > 0 ) {
 		agendaContent = (
-			<div>
+			<List aria-label="reminders">
 				{ todaysReminders.map(rem => (
-					<div>{rem.name}</div>
+					<ListItem>
+						<span className={ classes.colorIndicator } style={{ backgroundColor: rem.color}} {...rem} />
+						<ListItemText>
+							<Typography component="p" className={ classes.listEntry }>
+								<span>{rem.time}</span>
+								<span>{rem.name}</span>
+							</Typography>
+						</ListItemText>
+					</ListItem>
 				)) }
-			</div>
+			</List>
 		);
 	}
 
