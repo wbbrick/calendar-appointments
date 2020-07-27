@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -29,6 +29,7 @@ interface Props extends WithStyles<typeof styles>{
 
 const AddReminder = (props:Props) => {
 		const { classes } = props;
+		const { id } = useParams('id');
 
 		return (
 			<Dialog
@@ -38,7 +39,7 @@ const AddReminder = (props:Props) => {
 				maxWidth='md'
 			>
 				<DialogTitle id='form-dialog-title'>
-					Add Reminder
+					{id === 'new' ? 'Add Reminder' : 'Edit Reminder'}
 					<Link to="/">
 						<IconButton aria-label='Close' className={ classes.closeButton } onClick={() => ({})}>
 							<CloseIcon />

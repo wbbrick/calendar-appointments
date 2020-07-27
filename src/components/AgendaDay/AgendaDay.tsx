@@ -11,8 +11,7 @@ import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/s
 import Reminder from '../../types/Reminder';
 import { parse, format, fromUnixTime } from 'date-fns';
 import List from '@material-ui/core/List';
-import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = (theme: Theme) => createStyles({
@@ -37,12 +36,13 @@ const styles = (theme: Theme) => createStyles({
 		height: '10px',
 		width: '10px',
 		margin: '0 2px',
-		borderRadius: '10px'
+		borderRadius: '10px',
+		border: '1px solid black'
 	},
 	listEntry: {
-		fontSize: "16px",
-		"& span": {
-			marginRight: "10px"
+		fontSize: '16px',
+		'& span': {
+			marginRight: '10px'
 		}
 	}
 });
@@ -64,7 +64,7 @@ const AgendaDay = (props: Props) => {
 			)
 			.map(rem => ({ ...rem, "time": format(fromUnixTime(rem.date), "h:mma") })) : [];
 
-	let agendaContent = (<div>No Reminders for today (<a>Add one</a>)</div>)
+	let agendaContent = (<div>No Reminders for today.</div>)
 	
 	if( todaysReminders.length > 0 ) {
 		agendaContent = (
@@ -75,7 +75,9 @@ const AgendaDay = (props: Props) => {
 						<ListItemText>
 							<Typography component="p" className={ classes.listEntry }>
 								<span>{rem.time}</span>
-								<span>{rem.name}</span>
+								<Link to={`/reminder/${rem.id}`}>
+									<span>{rem.name}</span>
+								</Link>
 							</Typography>
 						</ListItemText>
 					</ListItem>
