@@ -106,6 +106,7 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 				<Button className={classes.button} onClick={onCancel} variant='contained'>Cancel</Button>
 				<Button 
 					className={classes.button} 
+					disabled={nameError.hasError}
 					onClick={() => {
 						if(!nameError.hasError) {
 							onSave(name, getUnixTime(date), color) 
