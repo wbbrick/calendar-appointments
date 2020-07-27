@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -24,26 +25,25 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles>{
-	isOpen: boolean,
-	onClose: () => void
 }
 
-const AddReminder = (props: Props) => {
-		const { classes, isOpen, onClose } = props;
+const AddReminder = (props:Props) => {
+		const { classes } = props;
 
 		return (
 			<Dialog
-				open={ isOpen }
-				onClose={onClose}
+				open
 				aria-labelledby='form-dialog-title'
-				fullWidth={ true }
+				fullWidth
 				maxWidth='md'
 			>
 				<DialogTitle id='form-dialog-title'>
 					Add Reminder
-					<IconButton aria-label='Close' className={ classes.closeButton } onClick={onClose}>
-						<CloseIcon />
-					</IconButton>
+					<Link to="/">
+						<IconButton aria-label='Close' className={ classes.closeButton } onClick={() => ({})}>
+							<CloseIcon />
+						</IconButton>
+					</Link>
 				</DialogTitle>
 				<Divider light />
 				<DialogContent className={ classes.addReminderFormContainer }>

@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import {
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import green from '@material-ui/core/colors/green';
@@ -51,7 +56,6 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles>{
-	onFabAddClick: () => void
 }
 
 interface State {
@@ -81,7 +85,7 @@ class App extends Component<Props, State> {
 	}
 
 	render() {
-		const { classes, onFabAddClick } = this.props;
+		const { classes } = this.props;
 		const { date } = this.state;
 
 		const month = date.toLocaleString( 'en-us', { month: 'long' } );
@@ -104,16 +108,24 @@ class App extends Component<Props, State> {
 					<CalendarGrid
 						date={ date }
 					/>
-					<Fab
-						aria-label='Add'
-						className={classes.fabAdd}
-						onClick={ onFabAddClick }
-					>
-						<AddIcon />
-					</Fab>
+					<Link to="/reminder/new">
+						<Fab
+							aria-label='Add'
+							className={classes.fabAdd}
+						>
+							<AddIcon />
+						</Fab>
+					</Link>
 				</Paper>
-				<AgendaDayContainer />
-				<AddReminderContainer />
+				
+				<Switch>
+					<Route path="/reminder/:id">
+						<AddReminderContainer />
+					</Route> 
+					<Route exact path="/agenda/:date">
+						<AgendaDayContainer />
+					</Route>
+				</Switch>
 			</div>
 		);
 	}

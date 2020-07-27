@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams, Link } from "react-router-dom";
 import CloseIcon from '@material-ui/icons/Close';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography'
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Reminder from '../../types/Reminder';
-import { format, fromUnixTime } from 'date-fns';
+import { parse, format, fromUnixTime } from 'date-fns';
 import List from '@material-ui/core/List';
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -47,22 +48,19 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles>{
-	agendaStatus: {
-		isOpen: boolean,
-		date: Date
-	}
-	reminderList: Array<Reminder>,
-	onClose: () => void
+	reminderList: Array<Reminder>
 }
 
 const AgendaDay = (props: Props) => {
-	const { classes, agendaStatus, onClose, reminderList } = props;
-	const dateTitle = agendaStatus.date ? format( agendaStatus.date, 'LLLL do, yyyy' ) : 'Closing'
+	const { classes, reminderList } = props;
+	const { date } = useParams();
+	const parsedDate = parse(date, 'MM-dd-yyyy', new Date());
+	const dateTitle = parsedDate ? format( parsedDate, 'LLLL do, yyyy' ) : 'Closing'
 
-	const todaysReminders = agendaStatus.date ? 	
+	const todaysReminders = parsedDate ? 	
 		reminderList
 			.filter(
-				rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(agendaStatus.date, 'MM/dd/yyyy')
+				rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(parsedDate, 'MM/dd/yyyy')
 			)
 			.map(rem => ({ ...rem, "time": format(fromUnixTime(rem.date), "h:mma") })) : [];
 
@@ -89,17 +87,18 @@ const AgendaDay = (props: Props) => {
 
 	return (
 		<Dialog
-			open={ agendaStatus.isOpen }
-			onClose={ onClose }
+			open
 			aria-labelledby='form-dialog-title'
-			fullWidth={ true }
+			fullWidth
 			maxWidth='md'
 		>
 			<DialogTitle id='form-dialog-title'>
 				{ dateTitle }
-				<IconButton aria-label='Close' className={ classes.closeButton } onClick={ onClose }>
-					<CloseIcon />
-				</IconButton>
+				<Link to="/">
+					<IconButton aria-label='Close' className={ classes.closeButton }>
+						<CloseIcon />
+					</IconButton>
+				</Link>
 			</DialogTitle>
 			<Divider light />
 			<DialogContent className={ classes.remindersContainer }>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import deepPurple from '@material-ui/core/colors/deepPurple';
 import { WithStyles, withStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -72,6 +73,10 @@ const styles = (theme: Theme) => createStyles({
 		fontFamily: "sans-serif",
 		fontSize: "12px",
 		margin: "auto"
+	},
+	agendaLink: {
+		textDecoration: "none",
+		fontColor: "black"
 	}
 });
 
@@ -82,12 +87,11 @@ interface DateObj {
 interface Props extends WithStyles<typeof styles>{
 	calendarDate: Date,
 	dateObj: DateObj,
-	onDayClick: (dateObj: DateObj) => void,
 	reminderList: Array<Reminder>
 }
 
 const CalendarDay = (props: Props) => {
-	const { classes, dateObj, calendarDate, reminderList, onDayClick } = props;
+	const { classes, dateObj, calendarDate, reminderList } = props;
 	const [ focused, setFocused ] = useState(false)
 
 	const isToday = isSameDay( dateObj.date, new Date() );
@@ -96,11 +100,12 @@ const CalendarDay = (props: Props) => {
 		focused ? classes.focusedAvatar :
 		classes.dateNumber;
 	
-	const todaysReminders = reminderList.filter(
-		rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(dateObj.date, 'MM/dd/yyyy')
-	).map(rem => (
-		<div className={ classes.reminderBadge } style={{ backgroundColor: rem.color}} {...rem} />
-	));
+	const todaysReminders = reminderList
+		.filter(rem => 
+			format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(dateObj.date, 'MM/dd/yyyy')
+		).map(rem => (
+			<div className={ classes.reminderBadge } style={{ backgroundColor: rem.color}} {...rem} />
+		));
 
 	const onMouseOver = () => setFocused(true)
 	const onMouseOut = () => setFocused(false)
@@ -109,17 +114,18 @@ const CalendarDay = (props: Props) => {
 		<div
 			onMouseOver={ onMouseOver }
 			onMouseOut={ onMouseOut }
-			onClick={ () => onDayClick( dateObj ) }
 			className={
 				isSameMonth( dateObj.date, calendarDate )
 					? classes.dayCell
 					: classes.dayCellOutsideMonth
 			}
 		>
-			<Avatar className={ avatarClass }>{ getDate( dateObj.date ) }</Avatar>
-			<div className={ classes.remindersContainer }>
-				{todaysReminders.length <= 10 ? todaysReminders : (<span className={ classes.overflowMessage }>10+</span>)}
-			</div>
+			<Link className={classes.agendaLink} to={`/agenda/${format(dateObj.date, 'MM-dd-yyyy')}`}>
+				<Avatar className={ avatarClass }>{ getDate( dateObj.date ) }</Avatar>
+				<div className={ classes.remindersContainer }>
+					{todaysReminders.length <= 10 ? todaysReminders : (<span className={ classes.overflowMessage }>10+</span>)}
+				</div>
+			</Link>
 		</div>
 	)
 }

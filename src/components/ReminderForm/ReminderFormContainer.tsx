@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ReminderForm from './ReminderForm';
-import { closeAddReminder, addReminder } from '../../redux/actions';
+import { addReminder } from '../../redux/actions';
 import Reminder from '../../types/Reminder';
 import { v4 as uuid } from 'uuid';
 
@@ -17,11 +17,9 @@ const mapStateToProps = (state:State) => {
 const mapDispatchToProps = (dispatch: any) => {
 	return {
 		onCancel: () => {
-			dispatch( closeAddReminder() );
 		},
 		onSave: (name: string, date: number, color: string, id = uuid()) => {
 			dispatch( addReminder({ name, date, color, id }) );
-			dispatch( closeAddReminder() );
 		}
 	}
 }

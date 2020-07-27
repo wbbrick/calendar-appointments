@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
+import { Link } from "react-router-dom";
 import { addDays } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
@@ -27,6 +28,19 @@ const styles = (theme: Theme) => createStyles({
 	}
 });
 
+interface ContextualLinkProps {
+	children: ReactNode,
+	hasError: boolean,
+	to: string
+}
+
+const ContextualLink = ( { children, hasError, to } : ContextualLinkProps ) => (
+	hasError ? <>{children}</> : (
+		<Link to={to}>
+			{children}
+		</Link>
+	)
+);
 interface Props extends WithStyles<typeof styles>{
 	onSave: (name: string, date: number, color: string) => void,
 	onCancel: () => void,
@@ -103,22 +117,24 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 				/>
 			</div>
 			<div className={classes.buttonContainer}>
-				<Button className={classes.button} onClick={onCancel} variant='contained'>Cancel</Button>
-				<Button 
-					className={classes.button} 
-					disabled={nameError.hasError}
-					onClick={() => {
-						if(!nameError.hasError) {
-							onSave(name, getUnixTime(date), color) 
-						} else {
-							// highlight the error
-						}
-					}}
-					variant='contained' 
-					color='primary'
-				>
-					Save
-				</Button>
+				<Link to="/">
+					<Button className={classes.button} onClick={onCancel} variant='contained'>Cancel</Button>
+				</Link>
+				<ContextualLink hasError={nameError.hasError} to="/">
+					<Button 
+						className={classes.button} 
+						disabled={nameError.hasError}
+						onClick={() => {
+							if(!nameError.hasError) {
+								onSave(name, getUnixTime(date), color) 
+							}
+						}}
+						variant='contained' 
+						color='primary'
+					>
+						Save
+					</Button>
+				</ContextualLink>
 			</div>
 		</Typography>
 	);

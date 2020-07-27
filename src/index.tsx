@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from "react-router-dom";
 import AppContainer from './components/App/AppContainer';
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
@@ -17,9 +18,11 @@ const store = createStore(
 );
 
 ReactDOM.render(
-	<Provider store={ store as any}>
-		<AppContainer />
-	</Provider>,
+	<Router>
+		<Provider store={ store as any}>
+			<AppContainer />
+		</Provider>
+	</Router>,
 	document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
