@@ -57,15 +57,21 @@ const styles = (theme: Theme) => createStyles({
 	remindersContainer: {
 		height: '100%',
 		display: 'flex',
+		flexWrap: 'wrap',
 		margin: '5px'
 	},
 	reminderBadge: {
 		flex: '0 0 auto',
 		height: '8px',
 		width: '8px',
-		margin: '6px 0',
+		margin: '0 2px',
 		borderRadius: '4px',
 		border: '1px solid black',
+	},
+	overflowMessage: {
+		fontFamily: "sans-serif",
+		fontSize: "12px",
+		margin: "auto"
 	}
 });
 
@@ -92,7 +98,9 @@ const CalendarDay = (props: Props) => {
 	
 	const todaysReminders = reminderList.filter(
 		rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(dateObj.date, 'MM/dd/yyyy')
-	);
+	).map(rem => (
+		<div className={ classes.reminderBadge } style={{ backgroundColor: rem.color}} {...rem} />
+	));
 
 	const onMouseOver = () => setFocused(true)
 	const onMouseOut = () => setFocused(false)
@@ -110,9 +118,7 @@ const CalendarDay = (props: Props) => {
 		>
 			<Avatar className={ avatarClass }>{ getDate( dateObj.date ) }</Avatar>
 			<div className={ classes.remindersContainer }>
-				{todaysReminders.map(rem => (
-					<div className={ classes.reminderBadge } style={{ backgroundColor: rem.color}} {...rem} />
-				))}
+				{todaysReminders.length <= 10 ? todaysReminders : (<span className={ classes.overflowMessage }>10+</span>)}
 			</div>
 		</div>
 	)
