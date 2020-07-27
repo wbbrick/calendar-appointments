@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch: any) => {
 		onCancel: () => {
 			dispatch( closeAddReminder() );
 		},
-		onSave: (name: String, date: number, color: String, id = uuid()) => {
+		onSave: (name: string, date: number, color: string, id = uuid()) => {
 			dispatch( addReminder({ name, date, color, id }) );
 			dispatch( closeAddReminder() );
 		}

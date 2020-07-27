@@ -56,15 +56,16 @@ const styles = (theme: Theme) => createStyles({
 	},
 	remindersContainer: {
 		height: '100%',
-		display: 'flex'
+		display: 'flex',
+		margin: '5px'
 	},
-	reminderCircle: {
+	reminderBadge: {
 		flex: '0 0 auto',
 		height: '8px',
 		width: '8px',
 		margin: '6px 0',
 		borderRadius: '4px',
-		border: '1px solid red'
+		border: '1px solid black',
 	}
 });
 
@@ -109,9 +110,9 @@ const CalendarDay = (props: Props) => {
 		>
 			<Avatar className={ avatarClass }>{ getDate( dateObj.date ) }</Avatar>
 			<div className={ classes.remindersContainer }>
-				{ todaysReminders.map((rem, idx) => (
-					<div className={classes.reminderCircle} key={idx} />
-				) ) }
+				{todaysReminders.map(rem => (
+					<div className={ classes.reminderBadge } style={{ backgroundColor: rem.color}} {...rem} />
+				))}
 			</div>
 		</div>
 	)

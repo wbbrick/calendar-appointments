@@ -1,8 +1,8 @@
 interface Reminder {
-    id: Number,
-    name: String,
+    id: string,
+    name: string,
     date: number, // store the date as a Unix epoch timestamp so Redux can serialize it
-    color: String
+    color: string
 }
 
 export default Reminder;

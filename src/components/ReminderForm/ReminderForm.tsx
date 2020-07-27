@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format, addDays } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
@@ -9,23 +9,23 @@ import Button from '@material-ui/core/Button';
 import Reminder from '../../types/Reminder';
 import { parse, getUnixTime } from 'date-fns';
 
-const DATE_FORMAT = "MM/dd/yyyy HH:mm";
+const DATE_FORMAT = 'MM/dd/yyyy HH:mm';
 
 const styles = (theme: Theme) => createStyles({
 	buttonContainer: {
-		display: "flex",
-		position: "absolute",
-		bottom: "20px",
-		right: "20px",
+		display: 'flex',
+		position: 'absolute',
+		bottom: '20px',
+		right: '20px',
 	},
 	button: {
-		flex: "auto",
-		margin: "0 5px"
+		flex: 'auto',
+		margin: '0 5px'
 	}
 });
 
 interface Props extends WithStyles<typeof styles>{
-	onSave: (name: String, date: number, color: String) => void,
+	onSave: (name: string, date: number, color: string) => void,
 	onCancel: () => void,
 	reminder?: Partial<Reminder>
 };
@@ -35,27 +35,49 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 	const [ date, setDate ] = useState(addDays(new Date(), 1));
 	const [ name, setName ] = useState('');
 	const [ color, setColor] = useState('#fff');
+	const [ nameError, setNameError ] = useState({ hasError: false, message: ''});
+
+	useEffect(() => {
+		if(name.length > 30) {
+			setNameError({
+				hasError: true,
+				message: 'Your reminder name cannot exceed 30 characters.'
+			});
+		} else if(name.length === 0) {
+			setNameError({
+				hasError: true,
+				message: 'Your reminder must be named.'
+			});
+		} else {
+			setNameError({
+				hasError: false,
+				message: ''
+			});
+		}
+	  }, [name])
 
 	return (
 		<Typography>
 			<TextField
-				id="name"
-				label="Name"
-				type="text"
+				id='name'
+				label='Name'
+				type='text'
 				fullWidth
 				value={name}
 				onChange={ev => setName(ev.currentTarget.value)}
 				InputLabelProps={{
 					shrink: true
 				}}
-				margin="dense"
+				error={nameError.hasError}
+				helperText={nameError.message}
+				margin='dense'
 			/>
 			<MuiPickersUtilsProvider utils={DateFnsUtils}>
 				<DateTimePicker
 					format={DATE_FORMAT}
-					margin="dense"
-					id="date-picker-inline"
-					label="Date picker inline"
+					margin='dense'
+					id='date-picker-inline'
+					label='Date/Time'
 					value={date}
 					onChange={setDate.bind(setDate)}
 					KeyboardButtonProps={{
@@ -64,23 +86,30 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 				/>
 			</MuiPickersUtilsProvider>
 			<TextField
-				id="color"
-				label="Color"
-				type="text"
+				id='color'
+				label='Color'
+				type='text'
 				value={color}
-				onChange={ev=> setName(ev.currentTarget.value)}
+				onChange={ev=> setColor(ev.currentTarget.value)}
 				InputLabelProps={{
 					shrink: true
 				}}
-				margin="dense"
+				
+				margin='dense'
 			/>
 			<div className={classes.buttonContainer}>
-				<Button className={classes.button} onClick={onCancel} variant="contained">Cancel</Button>
+				<Button className={classes.button} onClick={onCancel} variant='contained'>Cancel</Button>
 				<Button 
 					className={classes.button} 
-					onClick={() => onSave(name, getUnixTime(date), "#fff") }
-					variant="contained" 
-					color="primary"
+					onClick={() => {
+						if(!nameError.hasError) {
+							onSave(name, getUnixTime(date), color) 
+						} else {
+							// highlight the error
+						}
+					}}
+					variant='contained' 
+					color='primary'
 				>
 					Save
 				</Button>
