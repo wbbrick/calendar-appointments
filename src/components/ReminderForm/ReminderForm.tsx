@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format, addDays } from 'date-fns';
+import { addDays } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { MuiPickersUtilsProvider, DateTimePicker } from 'material-ui-pickers';
 import TextField from '@material-ui/core/TextField';
@@ -21,6 +21,9 @@ const styles = (theme: Theme) => createStyles({
 	button: {
 		flex: 'auto',
 		margin: '0 5px'
+	},
+	colorPicker: {
+		width: '20px'
 	}
 });
 
@@ -85,18 +88,20 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 					}}
 				/>
 			</MuiPickersUtilsProvider>
-			<TextField
-				id='color'
-				label='Color'
-				type='text'
-				value={color}
-				onChange={ev=> setColor(ev.currentTarget.value)}
-				InputLabelProps={{
-					shrink: true
-				}}
-				
-				margin='dense'
-			/>
+			<div>
+				<TextField
+					id='color'
+					label='Color'
+					type='color'
+					value={color}
+					onChange={ev=> setColor(ev.target.value)}
+					InputLabelProps={{
+						shrink: true
+					}}
+					className={classes.colorPicker}
+					margin='dense'
+				/>
+			</div>
 			<div className={classes.buttonContainer}>
 				<Button className={classes.button} onClick={onCancel} variant='contained'>Cancel</Button>
 				<Button 
