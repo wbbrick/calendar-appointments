@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import AgendaDay from './AgendaDay';
 import Reminder from '../../types/Reminder';
-import { format, fromUnixTime } from 'date-fns';
+import { deleteReminder } from '../../redux/actions';
 
 interface Props {}
 
@@ -17,6 +17,9 @@ const mapStateToProps = ( state: State, ownProps: Props ) => {
 
 const mapDispatchToProps = (dispatch: any) => {
 	return {
+		onDelete: (id: string) => {
+			dispatch( deleteReminder(id) );
+		}
 	}
 }
 

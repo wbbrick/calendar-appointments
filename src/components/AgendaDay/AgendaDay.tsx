@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link } from "react-router-dom";
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -13,6 +14,7 @@ import { parse, format, fromUnixTime } from 'date-fns';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 const styles = (theme: Theme) => createStyles({
 	remindersContainer: {
@@ -48,11 +50,12 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface Props extends WithStyles<typeof styles>{
-	reminderList: Array<Reminder>
+	reminderList: Array<Reminder>,
+	onDelete: (id: string) => void
 }
 
 const AgendaDay = (props: Props) => {
-	const { classes, reminderList } = props;
+	const { classes, reminderList, onDelete } = props;
 	const { date } = useParams();
 	const parsedDate = parse(date, 'MM-dd-yyyy', new Date());
 	const dateTitle = parsedDate ? format( parsedDate, 'LLLL do, yyyy' ) : 'Closing'
@@ -62,15 +65,18 @@ const AgendaDay = (props: Props) => {
 			.filter(
 				rem => format(fromUnixTime(rem.date), 'MM/dd/yyyy') === format(parsedDate, 'MM/dd/yyyy')
 			)
-			.map(rem => ({ ...rem, "time": format(fromUnixTime(rem.date), "h:mma") })) : [];
+			.map(rem => ({ ...rem, "time": format(fromUnixTime(rem.date), "hh:mma") })) : [];
 
-	let agendaContent = (<div>No Reminders for today.</div>)
+	let agendaContent = (<div>No reminders for today.</div>)
 	
 	if( todaysReminders.length > 0 ) {
 		agendaContent = (
 			<List aria-label="reminders">
 				{ todaysReminders.map(rem => (
 					<ListItem>
+						<IconButton onClick={() => onDelete(rem.id)}>
+							<DeleteIcon />
+						</IconButton>
 						<span className={ classes.colorIndicator } style={{ backgroundColor: rem.color}} {...rem} />
 						<ListItemText>
 							<Typography component="p" className={ classes.listEntry }>

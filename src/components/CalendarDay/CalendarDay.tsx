@@ -65,7 +65,7 @@ const styles = (theme: Theme) => createStyles({
 		flex: '0 0 auto',
 		height: '8px',
 		width: '8px',
-		margin: '0 2px',
+		margin: '2px',
 		borderRadius: '4px',
 		border: '1px solid black',
 	},

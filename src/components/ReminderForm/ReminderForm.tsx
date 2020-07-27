@@ -58,7 +58,7 @@ const ReminderForm = ( { classes, onSave, reminderList } : Props) => {
 	
 	const { id } = useParams("id");
 	const existingReminder = reminderList.find(rem => rem.id === id);
-	const editMode = !!existingReminder;
+	const editMode = !!existingReminder && id !== 'new';
 
 	if( editMode ) {
 		defaults = {...existingReminder, date: fromUnixTime(existingReminder.date)}
@@ -140,7 +140,7 @@ const ReminderForm = ( { classes, onSave, reminderList } : Props) => {
 						disabled={nameError.hasError}
 						onClick={() => {
 							if(!nameError.hasError) {
-								onSave(id, name, getUnixTime(date), color, editMode) 
+								onSave(defaults.id, name, getUnixTime(date), color, editMode) 
 							}
 						}}
 						variant='contained' 
