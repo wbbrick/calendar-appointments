@@ -37,7 +37,7 @@ const ReminderForm = ( { classes, onSave, onCancel, reminder } : Props) => {
 	// our default reminder is set exactly 24 hours from now
 	const [ date, setDate ] = useState(addDays(new Date(), 1));
 	const [ name, setName ] = useState('');
-	const [ color, setColor] = useState('#fff');
+	const [ color, setColor] = useState('#dd0000');
 	const [ nameError, setNameError ] = useState({ hasError: false, message: ''});
 
 	useEffect(() => {
